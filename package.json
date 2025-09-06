@@ -8,6 +8,7 @@
     "dev:spotlight": "npx @spotlightjs/sidecar",
     "dev:next": "next dev --turbopack",
     "dev": "npm run dev:next",
+    "db-server:memory": "pglite-server --run \"npm run dev:next\","
     "build:next": "next build",
     "build": "npm run build:next",
     "start": "next start",
