@@ -26,3 +26,12 @@ Content-Type: application/json
 The service accepts one bounded text prompt, uses the allowlisted `nvidia/nemotron-3-nano-30b-a3b` model, disables streaming, caps output to 1,024 tokens, and returns only the completion text, model identifier, and token usage. It rejects unauthenticated, malformed, oversized, or rate-limited requests.
 
 `GET /api/nvidia/health` is safe to call publicly. It reports configuration status without returning any credential.
+
+## Framework security baseline
+
+The gateway project pins Next.js `15.5.18` and React `19.1.7`. This addresses the Vercel deployment block for CVE-2025-66478 and the later May 2026 security release guidance for the 15.x and React 19.1.x lines. Future dependency updates must retain a patched security release. [1] [2]
+
+## References
+
+[1]: https://nextjs.org/blog/CVE-2025-66478 "Next.js: Security Advisory CVE-2025-66478"
+[2]: https://vercel.com/changelog/next-js-may-2026-security-release "Vercel: Next.js May 2026 security release"
