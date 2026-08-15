@@ -4,6 +4,7 @@ import { isbot } from 'isbot';
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse } from 'next/server';
 import { routing } from './libs/I18nRouting';
+import { API_SAFE_MIDDLEWARE_MATCHER } from './libs/MiddlewareConfig';
 
 const handleI18nRouting = createMiddleware(routing);
 
@@ -54,5 +55,5 @@ export const config = {
   // Match all pathnames except for
   // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
   // - … the ones containing a dot (e.g. `favicon.ico`)
-  matcher: '/((?!_next|_vercel|monitoring|.*\\..*).*)',
+  matcher: API_SAFE_MIDDLEWARE_MATCHER,
 };
