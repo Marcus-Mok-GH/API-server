@@ -6,6 +6,8 @@ export const Env = createEnv({
     ARCJET_KEY: z.string().startsWith('ajkey_').optional(),
     CLERK_SECRET_KEY: z.string().min(1),
     GEMINI_API_KEY: z.string().min(1),
+    NVIDIA_API_KEY: z.string().min(1).optional(),
+    NOVA_NVIDIA_GATEWAY_TOKEN: z.string().min(32).optional(),
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.string().optional(),
@@ -23,5 +25,7 @@ export const Env = createEnv({
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     NODE_ENV: process.env.NODE_ENV,
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    NVIDIA_API_KEY: process.env.NVIDIA_API_KEY,
+    NOVA_NVIDIA_GATEWAY_TOKEN: process.env.NOVA_NVIDIA_GATEWAY_TOKEN,
   },
 });
