@@ -1,5 +1,3 @@
-import { NextResponse } from 'next/server';
-
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
@@ -8,9 +6,14 @@ export function GET(): Response {
     process.env.NVIDIA_API_KEY && process.env.NOVA_NVIDIA_GATEWAY_TOKEN,
   );
 
-  return NextResponse.json({
+  return new Response(JSON.stringify({
     status: 'ok',
     provider: 'nvidia-nim',
     providerConfigured,
+  }), {
+    headers: {
+      'Cache-Control': 'no-store',
+      'Content-Type': 'application/json; charset=utf-8',
+    },
   });
 }
