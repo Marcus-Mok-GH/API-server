@@ -1,7 +1,7 @@
 import { createNvidiaGatewayHandler } from '@/libs/NvidiaGateway';
 
 export const runtime = 'nodejs';
-export const maxDuration = 20;
+export const maxDuration = 120;
 
 const gatewayHandler = createNvidiaGatewayHandler({
   getApiKey: () => process.env.NVIDIA_API_KEY,
