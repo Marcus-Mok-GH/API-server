@@ -1,11 +1,11 @@
 const NVIDIA_CHAT_URL = 'https://integrate.api.nvidia.com/v1/chat/completions';
 
-export const NVIDIA_GATEWAY_MODEL = 'nvidia/nemotron-3-nano-30b-a3b';
+export const NVIDIA_GATEWAY_MODEL = 'nvidia/nemotron-3.5-lightning-30b-a3b';
 export const MAX_PROMPT_CHARS = 12_000;
 export const MAX_OUTPUT_TOKENS = 1_024;
 export const GATEWAY_WINDOW_MS = 60_000;
 export const GATEWAY_REQUEST_LIMIT = 15;
-export const NVIDIA_TIMEOUT_MS = 18_000;
+export const NVIDIA_TIMEOUT_MS = 90_000;
 
 type GatewayErrorStatus = 400 | 401 | 429 | 502 | 503;
 
