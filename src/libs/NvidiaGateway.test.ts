@@ -6,6 +6,7 @@ import {
   GATEWAY_WINDOW_MS,
   MAX_OUTPUT_TOKENS,
   NVIDIA_GATEWAY_MODEL,
+  requestNvidiaCompletion,
   validatePrompt,
 } from './NvidiaGateway';
 
@@ -20,6 +21,21 @@ function createRequest(prompt: unknown, token = serviceToken) {
     },
     body: JSON.stringify({ prompt }),
   });
+}
+
+function createStreamingRequestBody(chunks: string[]): Response {
+  return new Response(
+    new ReadableStream<Uint8Array>({
+      start(controller) {
+        const encoder = new TextEncoder();
+        for (const chunk of chunks) {
+          controller.enqueue(encoder.encode(chunk));
+        }
+        controller.close();
+      },
+    }),
+    { headers: { 'Content-Type': 'text/event-stream' } },
+  );
 }
 
 describe('NvidiaGateway', () => {
@@ -116,5 +132,88 @@ describe('NvidiaGateway', () => {
       error: { message: 'NVIDIA inference is temporarily unavailable. Please retry shortly.' },
     });
     expect(JSON.stringify(body)).not.toContain('upstream details');
+  });
+
+  it('streams provider deltas when a stream is requested', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      createStreamingRequestBody([
+        'data: {"choices":[{"delta":{"content":"Hel"}}]}\n',
+        '\ndata: {"choices":[{"delta":{"content":"lo "}}]}\n\n',
+        'data: {"choices":[{"delta":{"content":"world"}}]}\n\n',
+        'data: [DONE]\n\n',
+      ]),
+    );
+    const deltas: string[] = [];
+
+    const result = await requestNvidiaCompletion('Hello', 'nvidia-secret', fetchImpl, {
+      stream: true,
+      onDelta: delta => deltas.push(delta),
+    });
+
+    const upstreamRequest = JSON.parse(String(fetchImpl.mock.calls[0]?.[1]?.body));
+
+    expect(upstreamRequest.stream).toBe(true);
+    expect(deltas).toEqual(['Hel', 'lo ', 'world']);
+    expect(result.text).toBe('Hello world');
+  });
+
+  it('relays provider SSE deltas and terminates with [DONE] for streaming requests', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      createStreamingRequestBody([
+        'data: {"choices":[{"delta":{"content":"Hi "}}]}\n\n',
+        'data: {"choices":[{"delta":{"content":"there"}}]}\n\n',
+        'data: [DONE]\n\n',
+      ]),
+    );
+    const handler = createNvidiaGatewayHandler({
+      getApiKey: () => 'nvidia-secret',
+      getServiceToken: () => serviceToken,
+      fetchImpl,
+    });
+
+    const response = await handler(
+      new Request('https://gateway.test/api/nvidia/chat', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${serviceToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: 'Hello', stream: true }),
+      }),
+    );
+
+    expect(response.headers.get('content-type')).toContain('text/event-stream');
+    expect(response.headers.get('cache-control')).toBe('no-cache');
+    expect(await response.text()).toBe(
+      'data: {"choices":[{"delta":{"content":"Hi "}}]}\n\n'
+      + 'data: {"choices":[{"delta":{"content":"there"}}]}\n\n'
+      + 'data: [DONE]\n\n',
+    );
+  });
+
+  it('returns the exact legacy JSON payload shape when stream is false (default)', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      Response.json({
+        model: NVIDIA_GATEWAY_MODEL,
+        choices: [{ message: { content: 'Legacy response.' } }],
+        usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
+      }),
+    );
+    const handler = createNvidiaGatewayHandler({
+      getApiKey: () => 'nvidia-secret',
+      getServiceToken: () => serviceToken,
+      fetchImpl,
+    });
+
+    const response = await handler(createRequest('Hello'));
+    const upstreamRequest = JSON.parse(String(fetchImpl.mock.calls[0]?.[1]?.body));
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      text: 'Legacy response.',
+      model: NVIDIA_GATEWAY_MODEL,
+      usage: { prompt_tokens: 1, completion_tokens: 2, total_tokens: 3 },
+    });
+    expect(upstreamRequest.stream).toBe(false);
   });
 });
