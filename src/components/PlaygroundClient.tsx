@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-type Provider = 'nvidia' | 'gemini';
+type Provider = 'nvidia';
 
 type PlaygroundResponse = {
   ok: boolean;
@@ -91,11 +91,8 @@ export function PlaygroundClient() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [isCheckingHealth, setIsCheckingHealth] = useState(false);
 
-  const endpoint = provider === 'nvidia' ? '/api/nvidia/chat' : '/api/gemini';
-  const model
-    = provider === 'nvidia'
-      ? 'nvidia/nemotron-3-nano-30b-a3b'
-      : 'gemini-1.5-flash';
+  const endpoint = '/api/nvidia/chat';
+  const model = 'nvidia/nemotron-3-nano-30b-a3b';
 
   async function runPrompt() {
     const trimmedPrompt = prompt.trim();
@@ -225,7 +222,7 @@ export function PlaygroundClient() {
           </div>
 
           <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            {(['nvidia', 'gemini'] as Provider[]).map(option => (
+            {(['nvidia'] as Provider[]).map(option => (
               <button
                 key={option}
                 type="button"
@@ -241,7 +238,7 @@ export function PlaygroundClient() {
                 }`}
               >
                 <span className="block text-sm font-semibold">
-                  {option === 'nvidia' ? 'NVIDIA NIM' : 'Google Gemini'}
+                  {option === 'nvidia' ? 'NVIDIA NIM' : 'N/A'}
                 </span>
                 <span className="mt-1 block text-xs text-slate-500">
                   {option === 'nvidia'
@@ -274,7 +271,7 @@ export function PlaygroundClient() {
               )
             : (
                 <div className="mt-6 rounded-xl border border-violet-100 bg-violet-50 p-4 text-sm leading-6 text-violet-950">
-                  Gemini uses the current Clerk session.
+                  N/A
                   {' '}
                   <Link
                     href="/sign-in/"
@@ -336,7 +333,7 @@ export function PlaygroundClient() {
             disabled={isRunning}
             className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-slate-950 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-cyan-950 disabled:cursor-wait disabled:opacity-60"
           >
-            {isRunning ? 'Sending request…' : `Run ${provider === 'nvidia' ? 'NVIDIA' : 'Gemini'} request`}
+            {isRunning ? 'Sending request…' : `Run NVIDIA request`}
           </button>
         </div>
 

@@ -49,12 +49,6 @@ const nvidiaRequestCode = [
   '}',
 ].join('\n');
 
-const geminiRequestCode = [
-  '{',
-  '  "prompt": "Summarize this text..."',
-  '}',
-].join('\n');
-
 const CodeBlock = ({ children }: { children: string }) => (
   <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-5 text-sm leading-7 text-slate-200 shadow-inner">
     <code>{children}</code>
@@ -75,7 +69,7 @@ const flowSteps = [
   {
     number: '03',
     title: 'Forward',
-    description: 'The gateway sends a normalized request to Gemini or NVIDIA NIM.',
+    description: 'The gateway sends a normalized request to NVIDIA NIM.',
   },
   {
     number: '04',
@@ -245,39 +239,6 @@ export default async function Index(props: IIndexProps) {
                   Prompts up to 12,000 characters. The gateway allows 15
                   requests per minute and maps provider failures to safe HTTP
                   responses.
-                </p>
-              </div>
-            </div>
-          </article>
-
-          <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-md bg-violet-100 px-2.5 py-1 font-mono text-xs font-bold text-violet-800">
-                POST
-              </span>
-              <code className="font-mono text-lg font-semibold text-slate-950">
-                /api/gemini
-              </code>
-              <span className="text-sm text-slate-500">
-                Signed-in Gemini access
-              </span>
-            </div>
-            <p className="mt-4 leading-7 text-slate-600">
-              Uses the current Clerk session to generate content with Gemini
-              Flash. Requests without a signed-in user return
-              {' '}
-              <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-800">
-                401 Unauthorized
-              </code>
-              .
-            </p>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <CodeBlock>{geminiRequestCode}</CodeBlock>
-              <div className="rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-                <p className="font-semibold text-slate-900">Limits</p>
-                <p className="mt-1">
-                  Each user has a 10-request usage limit tracked in Clerk
-                  private metadata. Missing prompts return 400.
                 </p>
               </div>
             </div>
