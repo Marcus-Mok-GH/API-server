@@ -30,7 +30,6 @@
   "dependencies": {
     "@clerk/localizations": "^3.17.2",
     "@clerk/nextjs": "^6.23.2",
-    "@google/genai": "^1.15.0",
     "@hookform/resolvers": "^5.1.1",
     "@t3-oss/env-nextjs": "^0.13.8",
     "isbot": "^5.1.30",

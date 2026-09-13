@@ -43,17 +43,9 @@ const healthCode = [
   '}',
 ].join('\n');
 
-const nvidiaRequestCode = [
-  '{',
-  '  "prompt": "Your prompt here"',
-  '}',
-].join('\n');
-
-const geminiRequestCode = [
-  '{',
-  '  "prompt": "Summarize this text..."',
-  '}',
-].join('\n');
+const nvidiaRequestCode = ['{', '  "prompt": "Your prompt here"', '}'].join(
+  '\n',
+);
 
 const CodeBlock = ({ children }: { children: string }) => (
   <pre className="overflow-x-auto rounded-2xl bg-slate-950 p-5 text-sm leading-7 text-slate-200 shadow-inner">
@@ -65,29 +57,33 @@ const flowSteps = [
   {
     number: '01',
     title: 'Receive',
-    description: 'Next.js parses the JSON request and validates the prompt.',
+    description:
+            'Next.js parses the JSON request and validates the prompt.',
   },
   {
     number: '02',
     title: 'Protect',
-    description: 'Auth and the endpoint-specific rate limiter run before provider work.',
+    description:
+            'Auth and the endpoint-specific rate limiter run before provider work.',
   },
   {
     number: '03',
     title: 'Forward',
-    description: 'The gateway sends a normalized request to Gemini or NVIDIA NIM.',
+    description: 'The gateway sends a normalized request to NVIDIA NIM.',
   },
   {
     number: '04',
     title: 'Respond',
-    description: 'You receive JSON on success, or a useful status and error message.',
+    description:
+            'You receive JSON on success, or a useful status and error message.',
   },
 ] as const;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'API Server Documentation',
-    description: 'A practical reference for the API Server gateway endpoints.',
+    description:
+            'A practical reference for the API Server gateway endpoints.',
   };
 }
 
@@ -109,9 +105,10 @@ export default async function Index(props: IIndexProps) {
             One gateway. Clear contracts.
           </h2>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            Send authenticated prompts to the configured AI providers through a
-            small, predictable HTTP surface. This page covers the endpoints,
-            request shapes, protection, and errors you should handle.
+            Send authenticated prompts to the configured AI provider
+            through a small, predictable HTTP surface. This page
+            covers the endpoints, request shapes, protection, and
+            errors you should handle.
           </p>
           <div className="mt-8 flex flex-wrap gap-3 text-sm font-semibold">
             <a
@@ -131,15 +128,21 @@ export default async function Index(props: IIndexProps) {
         <div className="relative mt-10 grid gap-3 border-t border-white/10 pt-6 text-sm sm:grid-cols-3">
           <div>
             <p className="text-slate-400">Base URL</p>
-            <p className="mt-1 font-mono text-cyan-200">{productionUrl}</p>
+            <p className="mt-1 font-mono text-cyan-200">
+              {productionUrl}
+            </p>
           </div>
           <div>
             <p className="text-slate-400">Transport</p>
-            <p className="mt-1 font-mono text-white">HTTPS + JSON</p>
+            <p className="mt-1 font-mono text-white">
+              HTTPS + JSON
+            </p>
           </div>
           <div>
             <p className="text-slate-400">Runtime</p>
-            <p className="mt-1 font-mono text-white">Next.js App Router</p>
+            <p className="mt-1 font-mono text-white">
+              Next.js App Router
+            </p>
           </div>
         </div>
       </section>
@@ -174,8 +177,8 @@ export default async function Index(props: IIndexProps) {
                 /api
               </code>
               {' '}
-              path from this app, or the production URL shown above from
-              another service.
+              path from this app, or the production URL shown
+              above from another service.
             </p>
           </div>
         </div>
@@ -186,7 +189,7 @@ export default async function Index(props: IIndexProps) {
           02 / Endpoints
         </p>
         <h3 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
-          Three routes, three jobs
+          Two routes, two jobs
         </h3>
         <div className="mt-6 grid gap-5">
           <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
@@ -197,20 +200,24 @@ export default async function Index(props: IIndexProps) {
               <code className="font-mono text-lg font-semibold text-slate-950">
                 /api/nvidia/health
               </code>
-              <span className="text-sm text-slate-500">Readiness check</span>
+              <span className="text-sm text-slate-500">
+                Readiness check
+              </span>
             </div>
             <p className="mt-4 leading-7 text-slate-600">
-              Returns the gateway status, provider name, and whether the
-              required NVIDIA credentials are configured. No authentication
-              header is required.
+              Returns the gateway status, provider name, and
+              whether the required NVIDIA credentials are
+              configured. No authentication header is required.
             </p>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <CodeBlock>{healthCode}</CodeBlock>
               <div className="rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-                <p className="font-semibold text-slate-900">Use it for</p>
+                <p className="font-semibold text-slate-900">
+                  Use it for
+                </p>
                 <p className="mt-1">
-                  Deploy checks, status pages, and startup diagnostics. The
-                  response is never cached.
+                  Deploy checks, status pages, and startup
+                  diagnostics. The response is never cached.
                 </p>
               </div>
             </div>
@@ -229,8 +236,8 @@ export default async function Index(props: IIndexProps) {
               </span>
             </div>
             <p className="mt-4 leading-7 text-slate-600">
-              Accepts a text prompt and forwards it to the configured NVIDIA
-              model. Authenticate with
+              Accepts a text prompt and forwards it to the
+              configured NVIDIA model. Authenticate with
               {' '}
               <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-800">
                 Authorization: Bearer &lt;token&gt;
@@ -240,44 +247,13 @@ export default async function Index(props: IIndexProps) {
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <CodeBlock>{nvidiaRequestCode}</CodeBlock>
               <div className="rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-                <p className="font-semibold text-slate-900">Limits</p>
-                <p className="mt-1">
-                  Prompts up to 12,000 characters. The gateway allows 15
-                  requests per minute and maps provider failures to safe HTTP
-                  responses.
+                <p className="font-semibold text-slate-900">
+                  Limits
                 </p>
-              </div>
-            </div>
-          </article>
-
-          <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-md bg-violet-100 px-2.5 py-1 font-mono text-xs font-bold text-violet-800">
-                POST
-              </span>
-              <code className="font-mono text-lg font-semibold text-slate-950">
-                /api/gemini
-              </code>
-              <span className="text-sm text-slate-500">
-                Signed-in Gemini access
-              </span>
-            </div>
-            <p className="mt-4 leading-7 text-slate-600">
-              Uses the current Clerk session to generate content with Gemini
-              Flash. Requests without a signed-in user return
-              {' '}
-              <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-800">
-                401 Unauthorized
-              </code>
-              .
-            </p>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <CodeBlock>{geminiRequestCode}</CodeBlock>
-              <div className="rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-                <p className="font-semibold text-slate-900">Limits</p>
                 <p className="mt-1">
-                  Each user has a 10-request usage limit tracked in Clerk
-                  private metadata. Missing prompts return 400.
+                  Prompts up to 12,000 characters. The gateway
+                  allows 15 requests per minute and maps
+                  provider failures to safe HTTP responses.
                 </p>
               </div>
             </div>
@@ -334,12 +310,18 @@ export default async function Index(props: IIndexProps) {
           </div>
           <div className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
             {[
-              ['400', 'The JSON body or prompt is missing or invalid.'],
+              [
+                '400',
+                'The JSON body or prompt is missing or invalid.',
+              ],
               [
                 '401',
                 'Authentication is missing or does not match the configured token.',
               ],
-              ['429', 'The endpoint or upstream provider rate limit was reached.'],
+              [
+                '429',
+                'The endpoint or upstream provider rate limit was reached.',
+              ],
               [
                 '500 / 502 / 503',
                 'The server, upstream provider, or required configuration is unavailable.',

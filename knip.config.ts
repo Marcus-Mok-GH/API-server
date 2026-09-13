@@ -7,6 +7,7 @@ const config: KnipConfig = {
     'unlighthouse.config.ts',
     'src/libs/I18n.ts',
     'src/libs/Logger.ts',
+    'src/libs/Env.ts',
     'src/types/I18n.ts',
     'tests/**/*.ts',
     'src/libs/NvidiaGateway.ts',
