@@ -9,6 +9,7 @@ const config: KnipConfig = {
     'src/libs/Logger.ts',
     'src/types/I18n.ts',
     'tests/**/*.ts',
+    'src/libs/NvidiaGateway.ts',
   ],
   // Dependencies to ignore during analysis
   ignoreDependencies: [

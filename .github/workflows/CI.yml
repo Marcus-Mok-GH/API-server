@@ -151,7 +151,9 @@ jobs:
         with:
           args: sh -c "HOME=/root npm run test:e2e" # Set HOME to /root to avoid Playwright error with Firebox
         env:
-          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY || 'test-key' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || 'test-key' }}
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'test-key' }}
 
       - name: Fix test results permission # Give permissions to test results needed by Chromatic
         run: |
@@ -194,3 +196,7 @@ jobs:
       - name: Run unlighthouse
         run: |
           npm run test:lighthouse
+        env:
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY || 'test-key' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || 'test-key' }}
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'test-key' }}
