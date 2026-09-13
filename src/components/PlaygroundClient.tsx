@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 type Provider = 'nvidia' | 'gemini';
@@ -62,6 +63,18 @@ function getErrorMessage(payload: unknown, status: number) {
   return `Request failed with status ${status}.`;
 }
 
+function getResponseText(payload: unknown) {
+  if (
+    !payload
+    || typeof payload !== 'object'
+    || !('text' in payload)
+    || typeof payload.text !== 'string'
+  ) {
+    return null;
+  }
+
+  return payload.text;
+}
 
 function formatJson(value: unknown): string {
   return JSON.stringify(value, null, 2) ?? '';
@@ -164,13 +177,7 @@ export function PlaygroundClient() {
     window.setTimeout(() => setCopied(false), 1500);
   }
 
-  const responseText
-    = response?.payload
-    && typeof response.payload === 'object'
-    && 'text' in response.payload
-    && typeof response.payload.text === 'string'
-      ? response.payload.text
-      : null;
+  const responseText = getResponseText(response?.payload);
 
   return (
     <div className="space-y-8 pb-12">
@@ -192,7 +199,7 @@ export function PlaygroundClient() {
           </p>
           <div className="mt-7 flex flex-wrap gap-3 text-sm">
             <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-slate-200">
-              POST {endpoint}
+              {`POST ${endpoint}`}
             </span>
             <span className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-slate-200">
               {model}
@@ -218,7 +225,7 @@ export function PlaygroundClient() {
           </div>
 
           <div className="mt-6 grid gap-2 sm:grid-cols-2">
-            {(['nvidia', 'gemini'] as Provider[]).map((option) => (
+            {(['nvidia', 'gemini'] as Provider[]).map(option => (
               <button
                 key={option}
                 type="button"
@@ -245,36 +252,40 @@ export function PlaygroundClient() {
             ))}
           </div>
 
-          {provider === 'nvidia' ? (
-            <label className="mt-6 block">
-              <span className="mb-2 block text-sm font-semibold text-slate-800">
-                NVIDIA gateway token
-              </span>
-              <input
-                type="password"
-                value={token}
-                onChange={event => setToken(event.target.value)}
-                placeholder="Bearer token value"
-                autoComplete="off"
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100"
-              />
-              <span className="mt-2 block text-xs leading-5 text-slate-500">
-                Used for this request only. It stays in browser memory and is
-                sent to the local API route as an Authorization header.
-              </span>
-            </label>
-          ) : (
-            <div className="mt-6 rounded-xl border border-violet-100 bg-violet-50 p-4 text-sm leading-6 text-violet-950">
-              Gemini uses the current Clerk session.{' '}
-              <a
-                href="/sign-in/"
-                className="font-semibold underline decoration-violet-300 underline-offset-4 hover:decoration-violet-700"
-              >
-                Sign in
-              </a>{' '}
-              if the request returns 401.
-            </div>
-          )}
+          {provider === 'nvidia'
+            ? (
+                <label className="mt-6 block">
+                  <span className="mb-2 block text-sm font-semibold text-slate-800">
+                    NVIDIA gateway token
+                  </span>
+                  <input
+                    type="password"
+                    value={token}
+                    onChange={event => setToken(event.target.value)}
+                    placeholder="Bearer token value"
+                    autoComplete="off"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:bg-white focus:ring-4 focus:ring-cyan-100"
+                  />
+                  <span className="mt-2 block text-xs leading-5 text-slate-500">
+                    Used for this request only. It stays in browser memory and
+                    is sent to the local API route as an Authorization header.
+                  </span>
+                </label>
+              )
+            : (
+                <div className="mt-6 rounded-xl border border-violet-100 bg-violet-50 p-4 text-sm leading-6 text-violet-950">
+                  Gemini uses the current Clerk session.
+                  {' '}
+                  <Link
+                    href="/sign-in/"
+                    className="font-semibold underline decoration-violet-300 underline-offset-4 hover:decoration-violet-700"
+                  >
+                    Sign in
+                  </Link>
+                  {' '}
+                  if the request returns 401.
+                </div>
+              )}
 
           <div className="mt-6 flex flex-wrap gap-2">
             {examples.map(example => (
