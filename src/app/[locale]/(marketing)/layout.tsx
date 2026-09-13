@@ -46,9 +46,19 @@ export default async function Layout(props: {
               </Link>
             </li>
             <li>
+              <Link
+                href="/playground/"
+                className="border-none text-gray-700 hover:text-gray-900"
+              >
+                Playground
+              </Link>
+            </li>
+            <li>
               <a
                 className="border-none text-gray-700 hover:text-gray-900"
-                href="https://github.com/ixartz/Next-js-Boilerplate"
+                href="https://github.com/Marcus-Mok-GH/API-server"
+                target="_blank"
+                rel="noreferrer noopener"
               >
                 GitHub
               </a>
