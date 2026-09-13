@@ -27,6 +27,7 @@ export default antfu(
     // Ignored paths
     ignores: [
       'migrations/**/*',
+      'vercel.json',
     ],
   },
   // --- Next.js Specific Rules ---
