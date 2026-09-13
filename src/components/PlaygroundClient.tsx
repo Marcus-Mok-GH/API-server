@@ -313,18 +313,22 @@ export function PlaygroundClient() {
               placeholder="Ask the model something…"
             />
             <span className="mt-2 block text-right text-xs text-slate-400">
-              {prompt.length.toLocaleString()} / 12,000
+              {prompt.length.toLocaleString()}
+              {' '}
+              / 12,000
             </span>
           </label>
 
-          {error ? (
-            <div
-              role="alert"
-              className="mt-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm leading-6 text-rose-800"
-            >
-              {error}
-            </div>
-          ) : null}
+          {error
+            ? (
+                <div
+                  role="alert"
+                  className="mt-4 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm leading-6 text-rose-800"
+                >
+                  {error}
+                </div>
+              )
+            : null}
 
           <button
             type="button"
@@ -346,71 +350,78 @@ export function PlaygroundClient() {
                 Inspect the payload
               </h3>
             </div>
-            {response ? (
-              <button
-                type="button"
-                onClick={copyResponse}
-                className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
-              >
-                {copied ? 'Copied' : 'Copy JSON'}
-              </button>
-            ) : null}
+            {response
+              ? (
+                  <button
+                    type="button"
+                    onClick={copyResponse}
+                    className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
+                  >
+                    {copied ? 'Copied' : 'Copy JSON'}
+                  </button>
+                )
+              : null}
           </div>
 
-          {response ? (
-            <>
-              <div className="mt-6 grid grid-cols-3 gap-2 text-center text-xs">
-                <div className="rounded-xl bg-white/10 p-3">
-                  <span className="block text-slate-400">Status</span>
-                  <strong
-                    className={`mt-1 block text-lg ${
-                      response.ok ? 'text-emerald-300' : 'text-rose-300'
-                    }`}
-                  >
-                    {response.status}
-                  </strong>
+          {response
+            ? (
+                <>
+                  <div className="mt-6 grid grid-cols-3 gap-2 text-center text-xs">
+                    <div className="rounded-xl bg-white/10 p-3">
+                      <span className="block text-slate-400">Status</span>
+                      <strong
+                        className={`mt-1 block text-lg ${
+                          response.ok ? 'text-emerald-300' : 'text-rose-300'
+                        }`}
+                      >
+                        {response.status}
+                      </strong>
+                    </div>
+                    <div className="rounded-xl bg-white/10 p-3">
+                      <span className="block text-slate-400">Time</span>
+                      <strong className="mt-1 block text-lg text-cyan-200">
+                        {response.duration}
+                        ms
+                      </strong>
+                    </div>
+                    <div className="rounded-xl bg-white/10 p-3">
+                      <span className="block text-slate-400">Route</span>
+                      <strong className="mt-1 block truncate text-lg text-violet-200">
+                        {provider}
+                      </strong>
+                    </div>
+                  </div>
+                  {responseText
+                    ? (
+                        <div className="mt-5 rounded-xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm leading-6 text-emerald-50">
+                          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-emerald-300">
+                            Generated text
+                          </p>
+                          <p className="whitespace-pre-wrap">{responseText}</p>
+                        </div>
+                      )
+                    : null}
+                  <pre className="mt-5 max-h-[28rem] overflow-auto rounded-xl bg-black/30 p-4 text-xs leading-6 text-slate-300">
+                    <code>{formatJson(response.payload)}</code>
+                  </pre>
+                </>
+              )
+            : (
+                <div className="mt-6 flex min-h-[22rem] items-center justify-center rounded-xl border border-dashed border-white/15 bg-white/5 p-6 text-center">
+                  <div>
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300/10 text-2xl text-cyan-200">
+                      {'{ }'}
+                    </div>
+                    <p className="mt-4 font-semibold text-white">
+                      Your response will appear here
+                    </p>
+                    <p className="mt-2 max-w-xs text-sm leading-6 text-slate-400">
+                      Run a request to see status, latency, generated text, and the
+                      raw JSON payload.
+                    </p>
+                  </div>
                 </div>
-                <div className="rounded-xl bg-white/10 p-3">
-                  <span className="block text-slate-400">Time</span>
-                  <strong className="mt-1 block text-lg text-cyan-200">
-                    {response.duration}ms
-                  </strong>
-                </div>
-                <div className="rounded-xl bg-white/10 p-3">
-                  <span className="block text-slate-400">Route</span>
-                  <strong className="mt-1 block truncate text-lg text-violet-200">
-                    {provider}
-                  </strong>
-                </div>
-              </div>
-              {responseText ? (
-                <div className="mt-5 rounded-xl border border-emerald-300/20 bg-emerald-300/10 p-4 text-sm leading-6 text-emerald-50">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-emerald-300">
-                    Generated text
-                  </p>
-                  <p className="whitespace-pre-wrap">{responseText}</p>
-                </div>
-              ) : null}
-              <pre className="mt-5 max-h-[28rem] overflow-auto rounded-xl bg-black/30 p-4 text-xs leading-6 text-slate-300">
-                <code>{formatJson(response.payload)}</code>
-              </pre>
-            </>
-          ) : (
-            <div className="mt-6 flex min-h-[22rem] items-center justify-center rounded-xl border border-dashed border-white/15 bg-white/5 p-6 text-center">
-              <div>
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-300/10 text-2xl text-cyan-200">
-                  {'{ }'}
-                </div>
-                <p className="mt-4 font-semibold text-white">
-                  Your response will appear here
-                </p>
-                <p className="mt-2 max-w-xs text-sm leading-6 text-slate-400">
-                  Run a request to see status, latency, generated text, and the
-                  raw JSON payload.
-                </p>
-              </div>
-            </div>
-          )}
+              )}
         </div>
       </section>
 
@@ -433,34 +444,38 @@ export function PlaygroundClient() {
             {isCheckingHealth ? 'Checking…' : 'Check health'}
           </button>
         </div>
-        {health ? (
-          <div className="mt-5 flex flex-wrap items-center gap-3 rounded-xl bg-slate-50 p-4 text-sm">
-            <span
-              className={`h-2.5 w-2.5 rounded-full ${
-                health.status === 'ok' && health.providerConfigured
-                  ? 'bg-emerald-500'
-                  : 'bg-rose-500'
-              }`}
-            />
-            <span className="font-semibold text-slate-900">
-              {health.status ?? 'Unavailable'}
-            </span>
-            <span className="text-slate-500">
-              {health.provider ?? 'nvidia-nim'}
-              {typeof health.providerConfigured === 'boolean'
-                ? ` · credentials ${health.providerConfigured ? 'configured' : 'missing'}`
-                : ''}
-            </span>
-            {health.error ? (
-              <span className="text-rose-700">{getErrorMessage(health.error, 500)}</span>
-            ) : null}
-          </div>
-        ) : (
-          <p className="mt-5 text-sm leading-6 text-slate-500">
-            The health route does not require a token. Use it to separate
-            deployment or configuration issues from prompt and auth issues.
-          </p>
-        )}
+        {health
+          ? (
+              <div className="mt-5 flex flex-wrap items-center gap-3 rounded-xl bg-slate-50 p-4 text-sm">
+                <span
+                  className={`h-2.5 w-2.5 rounded-full ${
+                    health.status === 'ok' && health.providerConfigured
+                      ? 'bg-emerald-500'
+                      : 'bg-rose-500'
+                  }`}
+                />
+                <span className="font-semibold text-slate-900">
+                  {health.status ?? 'Unavailable'}
+                </span>
+                <span className="text-slate-500">
+                  {health.provider ?? 'nvidia-nim'}
+                  {typeof health.providerConfigured === 'boolean'
+                    ? ` · credentials ${health.providerConfigured ? 'configured' : 'missing'}`
+                    : ''}
+                </span>
+                {health.error
+                  ? (
+                      <span className="text-rose-700">{getErrorMessage(health.error, 500)}</span>
+                    )
+                  : null}
+              </div>
+            )
+          : (
+              <p className="mt-5 text-sm leading-6 text-slate-500">
+                The health route does not require a token. Use it to separate
+                deployment or configuration issues from prompt and auth issues.
+              </p>
+            )}
       </section>
     </div>
   );
