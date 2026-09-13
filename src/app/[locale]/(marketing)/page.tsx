@@ -168,10 +168,12 @@ export default async function Index(props: IIndexProps) {
               <CodeBlock>{responseCode}</CodeBlock>
             </div>
             <p className="mt-4 text-sm leading-6 text-slate-600">
-              Use the relative{' '}
+              Use the relative
+              {' '}
               <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-800">
                 /api
-              </code>{' '}
+              </code>
+              {' '}
               path from this app, or the production URL shown above from
               another service.
             </p>
@@ -228,7 +230,8 @@ export default async function Index(props: IIndexProps) {
             </div>
             <p className="mt-4 leading-7 text-slate-600">
               Accepts a text prompt and forwards it to the configured NVIDIA
-              model. Authenticate with{' '}
+              model. Authenticate with
+              {' '}
               <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-800">
                 Authorization: Bearer &lt;token&gt;
               </code>
@@ -261,7 +264,8 @@ export default async function Index(props: IIndexProps) {
             </div>
             <p className="mt-4 leading-7 text-slate-600">
               Uses the current Clerk session to generate content with Gemini
-              Flash. Requests without a signed-in user return{' '}
+              Flash. Requests without a signed-in user return
+              {' '}
               <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-800">
                 401 Unauthorized
               </code>
