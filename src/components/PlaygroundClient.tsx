@@ -62,6 +62,7 @@ function getErrorMessage(payload: unknown, status: number) {
   return `Request failed with status ${status}.`;
 }
 
+
 function formatJson(value: unknown): string {
   return JSON.stringify(value, null, 2) ?? '';
 }
@@ -78,8 +79,8 @@ export function PlaygroundClient() {
   const [isCheckingHealth, setIsCheckingHealth] = useState(false);
 
   const endpoint = provider === 'nvidia' ? '/api/nvidia/chat' : '/api/gemini';
-  const model =
-    provider === 'nvidia'
+  const model
+    = provider === 'nvidia'
       ? 'nvidia/nemotron-3-nano-30b-a3b'
       : 'gemini-1.5-flash';
 
@@ -163,11 +164,11 @@ export function PlaygroundClient() {
     window.setTimeout(() => setCopied(false), 1500);
   }
 
-  const responseText =
-    response?.payload &&
-    typeof response.payload === 'object' &&
-    'text' in response.payload &&
-    typeof response.payload.text === 'string'
+  const responseText
+    = response?.payload
+    && typeof response.payload === 'object'
+    && 'text' in response.payload
+    && typeof response.payload.text === 'string'
       ? response.payload.text
       : null;
 
