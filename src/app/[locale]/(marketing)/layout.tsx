@@ -4,6 +4,8 @@ import { DemoBanner } from '@/components/DemoBanner';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { BaseTemplate } from '@/templates/BaseTemplate';
 
+const navLinkClass = 'border-none text-sm font-medium text-slate-600 transition-colors hover:text-slate-950';
+
 export default async function Layout(props: {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
@@ -22,45 +24,33 @@ export default async function Layout(props: {
         leftNav={(
           <>
             <li>
-              <Link
-                href="/"
-                className="border-none text-gray-700 hover:text-gray-900"
-              >
+              <Link href="/" className={navLinkClass}>
                 {t('home_link')}
               </Link>
             </li>
             <li>
-              <Link
-                href="/about/"
-                className="border-none text-gray-700 hover:text-gray-900"
-              >
+              <Link href="/about/" className={navLinkClass}>
                 {t('about_link')}
               </Link>
             </li>
             <li>
-              <Link
-                href="/portfolio/"
-                className="border-none text-gray-700 hover:text-gray-900"
-              >
+              <Link href="/portfolio/" className={navLinkClass}>
                 {t('portfolio_link')}
               </Link>
             </li>
             <li>
-              <Link
-                href="/playground/"
-                className="border-none text-gray-700 hover:text-gray-900"
-              >
+              <Link href="/playground/" className={navLinkClass}>
                 Playground
               </Link>
             </li>
             <li>
               <a
-                className="border-none text-gray-700 hover:text-gray-900"
+                className={navLinkClass}
                 href="https://github.com/Marcus-Mok-GH/API-server"
                 target="_blank"
                 rel="noreferrer noopener"
               >
-                GitHub
+                GitHub ↗
               </a>
             </li>
           </>
@@ -68,30 +58,25 @@ export default async function Layout(props: {
         rightNav={(
           <>
             <li>
-              <Link
-                href="/sign-in/"
-                className="border-none text-gray-700 hover:text-gray-900"
-              >
+              <Link href="/sign-in/" className={navLinkClass}>
                 {t('sign_in_link')}
               </Link>
             </li>
-
             <li>
               <Link
                 href="/sign-up/"
-                className="border-none text-gray-700 hover:text-gray-900"
+                className="rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-cyan-950"
               >
                 {t('sign_up_link')}
               </Link>
             </li>
-
             <li>
               <LocaleSwitcher />
             </li>
           </>
         )}
       >
-        <div className="py-5 text-xl [&_p]:my-6">{props.children}</div>
+        {props.children}
       </BaseTemplate>
     </>
   );
